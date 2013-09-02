@@ -34,15 +34,11 @@ def parse_log(members, input_file):
 	for	line in open(input_file):
 		who_match =  full_who_pattern.match(line)
 		if who_match != None:
-			print("Full match found on line: (%s)(%s)"% (who_match.group('name'), who_match.group('character_level')))
-			print(who_match.groups())
+			members[who_match.group('name')] = re_to_dict(who_match)
 		else:
 			part_who_match = part_who_pattern.match(line)
 			if part_who_match != None:
-				print("Simple match found on line: (%s)(%s)"% (part_who_match.group('name'), part_who_match.group('character_level')))
 				members[part_who_match.group('name')] = re_to_dict(part_who_match)
-				
-				print(part_who_match.groups())
 
 def parse_html():
 	''' Parse html page to prime the member_list tuple '''
