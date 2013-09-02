@@ -4,12 +4,24 @@
 	xmlns="http://www.sigilgames.com/vanguard-ui-0.1"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.sigilgames.com/vanguard-ui-0.1 ../../../vanguard-ui.xsd">
-<VGUIWindow name="Testing">
-	 <Rect x="200" y="400" width="200" height="100"/>
-	 <Settings  visible="true"
+	<VGUIWindow name="Testing">
+		<Rect x="200" y="400" width="200" height="100"/>
+		<Settings  visible="true"
 				border="frameall"
 				background="true"
 				movable="true">
-	 </Settings>	 
-</VGUIWindow>
+		</Settings>
+		<UseControl type="StaticWindow">
+			<StaticWindow pictureMode="true" textData="ClassGraphic">
+				<Rect x="0" y="0" width="65" height="81"/> 
+				<GraphicName label="ClassGraphic" isBaseName="false">
+					<Name>VgrdClassRogue</Name> 
+				</GraphicName> 
+			</StaticWindow> 
+			<Settings tooltip="Rogue"
+					visible="true" 
+					notifyOnLeftClick="false" 
+					notifyOnRightClick="false"/> 
+		</UseControl> 	 
+	</VGUIWindow>
 </XML>
