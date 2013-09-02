@@ -1,0 +1,124 @@
+<b>
+    
+<font face="Calibri" size="2">
+<a href="profile_vanguard_warfield.html" style="text-decoration: none">MEMBER_CHARACTER_NAME</a></font></b></td>
+    <td align="center" width="7%" height="20">
+    
+
+
+
+
+
+
+    <b><font face="Calibri" size="2">MEMBER_CHARACTER_CLASS</font></b></td>
+    <td align="center" width="1%" height="20">
+    
+
+
+
+
+
+
+    <b><font face="Calibri" size="2" color="#EBE0C2">MEMBER_LEVEL</font></b></td>
+    <td align="center" height="20">
+    
+
+
+
+
+
+
+    <b><font face="Calibri" size="2">MEMBER_PROFESSION</font></b></td>
+    <td align="center" width="1%" height="20">
+    
+
+
+
+
+
+
+<b><font face="Calibri" size="2" color="#EBE0C2">
+	MEMBER_PROFESSION_LEVEL</font></b></td>
+    <td bordercolor="#666666" align="center" height="20">
+    <b>
+	<font face="Calibri" size="2">Diplomat</font></b></td>
+    <td align="center" bordercolor="#666666" width="1%" height="20">
+    <b><font face="Calibri" size="2" color="#EBE0C2">MEMBER_DIPLOMAT_LEVEL</font></b></td>
+    <td align="center" height="20">
+
+
+
+
+
+
+
+<b><font face="Calibri" size="2">4</font></b></td>
+    <td align="center" height="20">
+
+
+
+
+
+
+
+	<b><font face="Calibri" size="2">5</font></b></td>
+    <td align="center" height="20">
+    <b><font face="Calibri" size="2">4</font></b></td>
+    <td align="center" height="20">
+    <b><font face="Calibri" size="2">1</font></b></td>
+    <td align="center" height="20">
+    <b>
+    <font face="Calibri" size="2">-</font></b></td>
+    <td align="center" height="20">
+    <b>
+    <font face="Calibri" size="2">-</font></b></td>
+    <td align="center" height="20">
+    <b>
+    <font face="Calibri" size="2">-</font></b></td>
+    <td align="center" height="20">
+    <b><font face="Calibri" size="2">1</font></b></td>
+    <td align="center" height="20">
+    <b><font face="Calibri" size="2">-</font></b></td>
+    <td align="center" height="20">
+
+
+
+
+
+
+
+<b>
+
+
+	<font face="Calibri" size="2">-</font></b></td>
+    <td align="center" height="20">
+
+
+
+
+
+
+
+<b>
+
+
+	<font face="Calibri" size="2">-</font></b></td>
+    <td align="center" height="20">
+
+
+
+
+
+
+
+<b>
+
+
+	<font face="Calibri" size="2">-</font></b></td>
+    <td align="center" height="20">
+    <b>
+    <font face="Calibri" size="2">Aug. 1999</font></b></td>
+  </tr>
+	<tr>
+    <td align="center" width="14%" height="20" background="backg_gray.gif">
+    

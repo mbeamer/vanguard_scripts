@@ -1,20 +1,18 @@
 import re
 import sys
 
-def re_to_dict(re_sults):
-	''' use a match from re to prime a dictionary.  Some items are optional, so handle cases where they are missing. '''
-	result = dict()
-	result['character_level'] = re_sults.group('character_level')
-	result['class'] = re_sults.group('class')
-	result['diplomacy_level'] = re_sults.group('diplomacy_level')
+def update_members(members, re_sults):
+	''' use a match from re to update members dictionary.  Some items are optional, so handle cases where they are missing. '''
+	a_member = members[re_sults.group('name')]
+	a_member['character_level'] = re_sults.group('character_level')
+	a_member['class'] = re_sults.group('class')
+	a_member['diplomacy_level'] = re_sults.group('diplomacy_level')
 	try:
-		result['trade_level'] = re_sults.group('trade_level')
-		result['trade_skill'] = re_sults.group('trade_skill')
+		a_member['trade_level'] = re_sults.group('trade_level')
+		a_member['trade_skill'] = re_sults.group('trade_skill')
 	except:
-		result['trade_level'] = 0
-		result['trade_skill'] = 'Undecided'
-
-	return result
+		a_member['trade_level'] = 0
+		a_member['trade_skill'] = 'Undecided'
 
 def parse_log(members, input_file):
 	''' Parse the input_log and output an updated member_list '''
@@ -34,25 +32,43 @@ def parse_log(members, input_file):
 	for	line in open(input_file):
 		who_match =  full_who_pattern.match(line)
 		if who_match != None:
-			members[who_match.group('name')] = re_to_dict(who_match)
+			update_members(members, who_match)
 		else:
 			part_who_match = part_who_pattern.match(line)
 			if part_who_match != None:
-				members[part_who_match.group('name')] = re_to_dict(part_who_match)
+				update_members(members, part_who_match)
 
-def parse_html():
+def parse_html(members, web_file):
 	''' Parse html page to prime the member_list tuple '''
-	pass
+	members['Khazull'] = dict()
+	members['Warfeild'] = dict()
+	with open (os.path.join(web_file, "members.html"), "r") as webfile:
+    		web_string = webfile.read()
+	with optn (os.path.join(web_file, "members_parse_template.html"), "r") as templatefile:
+		template_string = templatefile.read()
+	for match in re.findall(template_string, web_string)
+		print("Match\n %s"% re.group(0))
 	
+def write_html(members):
+	''' Pieces back together the html page '''
+	pass
+
 def main():
 	# Gather user define pieces
-	input_file = input("Enter the log name: ")
-	output_file = input("Enter the log markup name (%s.yuku)"% input_file)
+	input_file = input("Enter the log name: (../vanguard_log.txt): ")
+	if input_file == '':
+		input_file = "../vanguard_log.txt"
+	output_file = input("Enter the log markup name (%s.yuku): "% input_file)
+	web_file = input("web content location (members.html, member_template.txt, etc) (./data/): ")
+	if web_file == '':
+		web_file = "./data/"
 	if output_file == '':
 		output_file = "%s.yuku"% input_file
 
 	members = dict()
+	parse_html(members, web_file)
 	parse_log(members, input_file)
+	write_html(members)
 	print(members)	
 	print("Done parsing\n")
 	
