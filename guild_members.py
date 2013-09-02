@@ -1,8 +1,22 @@
 import re
 import sys
 
+def re_to_dict(re_sults):
+	''' use a match from re to prime a dictionary.  Some items are optional, so handle cases where they are missing. '''
+	result = dict()
+	result['character_level'] = re_sults.group('character_level')
+	result['class'] = re_sults.group('class')
+	result['diplomacy_level'] = re_sults.group('diplomacy_level')
+	try:
+		result['trade_level'] = re_sults.group('trade_level')
+		result['trade_skill'] = re_sults.group('trade_skill')
+	except:
+		result['trade_level'] = 0
+		result['trade_skill'] = 'Undecided'
 
-def parse_log(member_list, input_file):
+	return result
+
+def parse_log(members, input_file):
 	''' Parse the input_log and output an updated member_list '''
 	
 	# Vanguard's /who command reports a well semi-formatted dump.  Two formats are possible, those with Trade skills, and those without.
@@ -13,22 +27,21 @@ def parse_log(member_list, input_file):
 
 	# Parse the log looking for /who results.  Store in a tuple of tuples
 	# members_list = [<member name>: [character_level: <level>, class: <class>, trade_level: <trade_level>, trade_skill: <trade_skill>, diplomacy_level: <diplomacy_level>], ... ]
-	full_who_pattern = re.compile("^\[[0-9]{2}:[0-9]{2}:[0-9]{2}\]\s*(?P<name>\w*):\s*Level\s*(?P<char_level>[0-9]+)\s*(?P<class>\w+),\s*(?P<trade_level>[0-9]+)\s*(?P<trade>\w+),\s*(?P<dip_level>[0-9]+)\s*Diplomat\s*\(Stone\s*\&\s*Steel\)")
-	part_who_pattern = re.compile("^\[[0-9]{2}:[0-9]{2}:[0-9]{2}\]\s*(?P<name>\w*):\s*Level\s*(?P<char_level>[0-9]+)\s*(?P<class>\w+),\s*(?P<dip_level>[0-9]+)\s*Diplomat\s*\(Stone\s*\&\s*Steel\)")
+	full_who_pattern = re.compile("^\[[0-9]{2}:[0-9]{2}:[0-9]{2}\]\s*(?P<name>\w*):\s*Level\s*(?P<character_level>[0-9]+)\s*(?P<class>\w+),\s*(?P<trade_level>[0-9]+)\s*(?P<trade>\w+),\s*(?P<diplomacy_level>[0-9]+)\s*Diplomat\s*\(Stone\s*\&\s*Steel\)")
+	part_who_pattern = re.compile("^\[[0-9]{2}:[0-9]{2}:[0-9]{2}\]\s*(?P<name>\w*):\s*Level\s*(?P<character_level>[0-9]+)\s*(?P<class>\w+),\s*(?P<diplomacy_level>[0-9]+)\s*Diplomat\s*\(Stone\s*\&\s*Steel\)")
 
 	print("\n")
 	for	line in open(input_file):
 		who_match =  full_who_pattern.match(line)
 		if who_match != None:
-			print("Full match found on line: (%s)(%s)"% (who_match.group('name'), who_match.group('char_level')))
+			print("Full match found on line: (%s)(%s)"% (who_match.group('name'), who_match.group('character_level')))
 			print(who_match.groups())
 		else:
 			part_who_match = part_who_pattern.match(line)
 			if part_who_match != None:
-				print("Simple match found on line: (%s)(%s)"% (part_who_match.group('name'), part_who_match.group('char_level')))
-				match_tuple = part_who_match.groups()
+				print("Simple match found on line: (%s)(%s)"% (part_who_match.group('name'), part_who_match.group('character_level')))
+				members[part_who_match.group('name')] = re_to_dict(part_who_match)
 				
-				match_tuple{'trade_level'} = 1
 				print(part_who_match.groups())
 
 def parse_html():
@@ -42,9 +55,9 @@ def main():
 	if output_file == '':
 		output_file = "%s.yuku"% input_file
 
-	member_list = []
-	parse_log(member_list, input_file)
-	
+	members = dict()
+	parse_log(members, input_file)
+	print(members)	
 	print("Done parsing\n")
 	
 #items = input_file_handle.readline()[10:]
