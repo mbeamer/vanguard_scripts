@@ -1,5 +1,6 @@
 import re
 import sys
+import os
 
 def update_members(members, re_sults):
 	''' use a match from re to update members dictionary.  Some items are optional, so handle cases where they are missing. '''
@@ -44,9 +45,10 @@ def parse_html(members, web_file):
 	members['Warfeild'] = dict()
 	with open (os.path.join(web_file, "members.html"), "r") as webfile:
     		web_string = webfile.read()
-	with optn (os.path.join(web_file, "members_parse_template.html"), "r") as templatefile:
+	with open (os.path.join(web_file, "members_parse_template.html"), "r") as templatefile:
 		template_string = templatefile.read()
-	for match in re.findall(template_string, web_string)
+	print("Template: %s"% template_string)
+	for match in re.findall(template_string, web_string):
 		print("Match\n %s"% re.group(0))
 	
 def write_html(members):
