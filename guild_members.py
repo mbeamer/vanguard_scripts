@@ -23,7 +23,7 @@ def parse_log(members, input_file):
 			a_member['trade_level'] = re_sults.group('trade_level')
 			a_member['trade_skill'] = re_sults.group('trade_skill')
 		except:
-			a_member['trade_level'] = '0'
+			a_member['trade_level'] = '-'
 			a_member['trade_skill'] = 'Undecided'
 	
 	# Vanguard's /who command reports a well semi-formatted dump.  Two formats are possible, those with Trade skills, and those without.
@@ -47,18 +47,24 @@ def parse_log(members, input_file):
 			if part_who_match != None:
 				update_members(members, part_who_match)
 
-def update_html(members, web_file):
+def update_html(members, web_file, output_file):
 	''' Process the html.  Update fields as available. '''
-
-	def get_match_name(col, r_index, members):
+	CHARACTER_NAME_COL = 0
+	CHARACTER_LEVEL_COL = 5
+	TRADE_SKILL_COL = 6
+	TRADE_LEVEL_COL = 7
+	DIPLOMACY_LEVEL_COL = 9
+	COL_MAX = DIPLOMACY_LEVEL_COL+1
+	
+	def get_match_name(col, members):
 		''' Get the character name from the current row if possible.  Return empty otherwise'''
+		result = None	
 		try:
-			# Some names have hyperlinks.  Try that first.
+			# Some names have hyperlinks. 
 			if col.a == None:
 				web_name = col.b.font.find(text=True).string
 			else:
 				web_name = col.a.string
-			print(web_name)
 			for name in members:
 				if web_name.startswith(name):
 					result = name
@@ -66,7 +72,7 @@ def update_html(members, web_file):
 			result = None
 		return result
 		
-	source = BeautifulSoup(open(os.path.join(web_file, "members.html")))
+	source = BeautifulSoup(open(web_file))
 
 	# We care about the 4th table in the page
 	table = source.findAll('table')[3] 
@@ -77,27 +83,27 @@ def update_html(members, web_file):
 		row = rows[r_index]
 		cols = row.findAll('td')
 
-		name = get_match_name(cols[0], r_index, members)
+		name = get_match_name(cols[CHARACTER_NAME_COL], members)
 		
 		# If the current name is in our update list, do an inplace update.
 		if name != None:
 			try:
-				for c_index in range(8):
+				for c_index in range(COL_MAX):
 					col = cols[c_index]
-					if c_index == 3:
+					if c_index == CHARACTER_LEVEL_COL:
 						col.b.font.string = members[name]['character_level']
-					if (c_index == 5) and (col.b != None):
+					if (c_index == TRADE_LEVEL_COL) and (col.b != None):
 							col.b.font.string = members[name]['trade_level']
-					if (c_index == 6) and (col.b != None):
+					if (c_index == TRADE_SKILL_COL) and (col.b != None):
 						col.b.font.string = members[name]['trade_skill']
-					if c_index == 7:
+					if c_index == DIPLOMACY_LEVEL_COL:
 						col.b.font.string = members[name]['diplomacy_level']
 				print("Updating: %s [level:%s, dipl:%s, tradeLevel:%s, Skill:%s]"% (name, members[name]['character_level'], members[name]['diplomacy_level'], members[name]['trade_level'], members[name]['trade_skill']))
 			except Exception as ex:
-				print('%s - [%s, %s]: %s'% (name, r_index, c_index, ex))
+				print('Error: %s - [%s, %s]: %s'% (name, r_index, c_index, ex))
 	
 	# Write back the updated page.
-	with open(os.path.join(web_file, "membersUpdated.html"), 'w') as outfile:
+	with open(output_file, 'w') as outfile:
 		outfile.write(source.prettify())
 
 def main():
@@ -105,18 +111,18 @@ def main():
 	input_file = input("Enter the log name: (./data/vanguard.log): ")
 	if input_file == '':
 		input_file = "./data/vanguard.log"
-	output_file = input("Enter the log markup name (%s.yuku): "% input_file)
-	web_file = input("web content location (members.html, member_template.txt, etc) (./data/): ")
+	web_file = input("Enter the web input location (./data/members.html): ")
 	if web_file == '':
-		web_file = "./data/"
+		web_file = "./data/members.html"
+	output_file = input("Enter the web output location (%s.updated): "% web_file)
 	if output_file == '':
-		output_file = "%s.yuku"% input_file
+		output_file = "%s.updated"% web_file
 
 	members = dict()
 	parse_log(members, input_file)
-	update_html(members, web_file)
+	update_html(members, web_file, output_file)
 
-	print("Done parsing\n")
+	print("\nDone parsing.  %s created\n"% output_file)
 		
 if __name__ == '__main__':
 	main()
