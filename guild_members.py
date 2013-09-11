@@ -1,7 +1,7 @@
 import re
 import sys
 import os
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 def parse_log(members, input_file):
 	''' Parse the input_log and output an updated member_list '''
@@ -24,7 +24,7 @@ def parse_log(members, input_file):
 			a_member['trade_skill'] = re_sults.group('trade_skill')
 		except:
 			a_member['trade_level'] = '-'
-			a_member['trade_skill'] = 'Undecided'
+			a_member['trade_skill'] = ''
 	
 	# Vanguard's /who command reports a well semi-formatted dump.  Two formats are possible, those with Trade skills, and those without.
 	# For example:
@@ -94,8 +94,23 @@ def update_html(members, web_file, output_file):
 						col.b.font.string = members[name]['character_level']
 					if (c_index == TRADE_LEVEL_COL) and (col.b != None):
 							col.b.font.string = members[name]['trade_level']
-					if (c_index == TRADE_SKILL_COL) and (col.b != None):
-						col.b.font.string = members[name]['trade_skill']
+					if (c_index == TRADE_SKILL_COL):
+						if col.b != None:
+							col.b.font.string = members[name]['trade_skill']
+						else:
+							# No previous trade_skill existed.  We need to add the html details.
+
+							#Setup and insert the b tag
+							b_tag = source.new_tag('b')
+							col.insert(1, b_tag)
+
+							#Setup and insert the font tag
+							font_tag = source.new_tag('font')
+							font_tag['face'] = 'Calibri'
+							font_tag['size'] = '2'
+							font_tag.string = members[name]['trade_skill']
+							b_tag.insert(1, font_tag)
+
 					if c_index == DIPLOMACY_LEVEL_COL:
 						col.b.font.string = members[name]['diplomacy_level']
 				print("Updating: %s [level:%s, dipl:%s, tradeLevel:%s, Skill:%s]"% (name, members[name]['character_level'], members[name]['diplomacy_level'], members[name]['trade_level'], members[name]['trade_skill']))
