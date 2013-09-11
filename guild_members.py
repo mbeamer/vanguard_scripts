@@ -53,11 +53,12 @@ def update_html(members, web_file):
 	def get_match_name(col, r_index, members):
 		''' Get the character name from the current row if possible.  Return empty otherwise'''
 		try:
-			if r_index == 0:
-				web_name = col.a.string
-			else:
+			# Some names have hyperlinks.  Try that first.
+			if col.a == None:
 				web_name = col.b.font.find(text=True).string
-			result = None
+			else:
+				web_name = col.a.string
+			print(web_name)
 			for name in members:
 				if web_name.startswith(name):
 					result = name
@@ -77,7 +78,6 @@ def update_html(members, web_file):
 		cols = row.findAll('td')
 
 		name = get_match_name(cols[0], r_index, members)
-		#name = get_name(cols[0], r_index)
 		
 		# If the current name is in our update list, do an inplace update.
 		if name != None:
